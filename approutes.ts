@@ -124,7 +124,7 @@ export type AppRoute = StaticAppRoute|FunctionAppRoute
 export type AppRoutes = AppRoute[]
 
 /**
- * RouteBuilder is a convenience class that helps you create
+ * RoutesBuilder is a convenience class that helps you create
  * application routes for the createApp function using a 
  * a familiar pattern. 
  */

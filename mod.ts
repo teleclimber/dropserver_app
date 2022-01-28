@@ -8,14 +8,15 @@ import type {Migrations} from './migrations.ts';
 import mustGetLibSupport from './getlibsupport.ts';
 
 /**
- * DropserverApp 
+ * Class that provides facilites to interact with
+ * Dropserver host. 
  */
 export class DropserverApp {
 	/**
-	 * appPath is the path to the app directory for this particular run of the sandbox.
-	 * It may change at any time. Do not store it, instead always call this function.
-	 * @param p a path segment to append to the app path.
-	 * @returns a path that joins the app path to the passed path segment.
+	 * Get an absolute path to app files.
+	 * This path may change at any time. Do not store it, instead always call this function.
+	 * @param p relative path segment to append to the app path
+	 * @returns absolute path
 	 */
 	appPath(p:string) :string {
 		// path functions should take a sequence of args, and apply path.join over all of them.
@@ -23,20 +24,20 @@ export class DropserverApp {
 		return path.join(internal.appPath, p);
 	}
 	/**
-	 * appspacePath is the path to the appspace data directory for this particular run of the sandbox.
-	 * It may change at any time. Do not store it, instead always call this function.
-	 * @param p a path segment to append to the appspace path.
-	 * @returns a path that joins the appspace path to the passed path segment.
+	 * Get an absolute path to appspace files.
+	 * This path may change at any time. Do not store it, instead always call this function.
+	 * @param p relative path segment to append to the appspace path
+	 * @returns absolute path
 	 */
 	appspacePath(p:string) :string {
 		const internal = mustGetLibSupport();
 		return path.join(internal.appspacePath, p);
 	}
 	/**
-	 * avatarsPath is the path to the directory where user avatars are stored.
-	 * It may change at any time. Do not store it, instead always call this function.
-	 * @param p a path segment to append to the app path.
-	 * @returns a path that joins the app path to the passed path segment.
+	 * Get an absolute path to appspace user avatars.
+	 * This path may change at any time. Do not store it, instead always call this function.
+	 * @param p relative path segment to append to the avatars path
+	 * @returns absolute path
 	 */
 	avatarsPath(p:string) :string {
 		return path.join(mustGetLibSupport().avatarsPath, p);
@@ -44,7 +45,7 @@ export class DropserverApp {
 
 	/**
 	 * Get all users for this appspace.
-	 * @returns an array of Users.
+	 * @returns array of Users
 	 */
 	async getUsers() :Promise<User[]> {
 		const l = mustGetLibSupport();
@@ -52,24 +53,13 @@ export class DropserverApp {
 	}
 	/**
 	 * Get a single user of this appspace.
-	 * @param proxyId of the user you wish to retrieve.
-	 * @returns the User.
+	 * @param proxyId the user you wish to retrieve
+	 * @returns User
 	 */
 	async getUser(proxyId:string) :Promise<User> {
 		const l = mustGetLibSupport();
 		return await l.users.get(proxyId);
 	}
-}
-
-interface DropserverAppI {
-	appPath(p:string) :string
-	appspacePath(p:string) :string
-	avatarsPath(p:string) :string
-
-	getUsers() :Promise<User[]>
-	getUser(proxyId:string) :Promise<User>
-
-	//...?
 }
 
 type AppRoutesFn = ()=>AppRoutes;
@@ -81,7 +71,7 @@ type MigrationsPr = () => Promise<Migrations>;
  * AppConfig is what the app code provides to Dropserver 
  * to create an app
  */
-interface AppConfig {
+export interface AppConfig {
 	/**
 	 * routes are application routes. They do not change.
 	 */
@@ -94,13 +84,12 @@ interface AppConfig {
 }
 
 /**
- * createApp initializes the application and returns an object that
- * lets the app work with Dropserver.
+ * Initialize the application
  * @param config sets everything that needs to be set for the app to work
- * @returns a DropserverAppI interface that should be used by app code to 
+ * @returns a DropserverApp interface that should be used by app code to 
  * interact with the Dropserver host.
  */
-export default function createApp(config:AppConfig) :DropserverAppI {
+export default function createApp(config:AppConfig) :DropserverApp {
 	const libSupport = mustGetLibSupport();
 	
 	// routes:

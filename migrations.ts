@@ -1,6 +1,6 @@
 /**
- * MigrationFunction is the signature of a function used to 
- * migrate appspace data from one schema to the next or previous.
+ * function used to migrate appspace data from one schema
+ * to the next or previous.
  */
 export type MigrationFunction = () => Promise<void>;
 
@@ -8,21 +8,22 @@ export type MigrationFunction = () => Promise<void>;
  * Describe a Migration step.
  */
 export type Migration = {
+	// TODO figure out how to document type alias object props
 	/**
-	 * direction of migration. "up" means migrating to the next schema,
+	 * Direction of migration. "up" means migrating to the next schema,
 	 * while "down" is the opposite.
 	 */
 	direction: "up"|"down",
 	/**
-	 * Schema is an integer representing the version of the data directoriy of the appspace.
+	 * Schema is an integer representing the version of the data directory of the appspace.
 	 * - If direction is "up", schema is the version reached after the migration finishes.
 	 * - If the direction is down, schema is the version before the migration starts.
 	 * 
-	 * Put another way: for a given schema number, "down" reverses the changes mde by "up".
+	 * Put another way: for a given schema number, "down" reverses the changes made by "up".
 	 */
 	schema: number,
 	/**
-	 * The migration function. See MigrationFunction signature.
+	 * The migration function.
 	 */
 	func: MigrationFunction
 }
@@ -33,14 +34,14 @@ export type Migration = {
 export type Migrations = Migration[];
 
 /**
- * MigrationBuilder helps you create a Migrations Object.
+ * Class that helps create a Migrations object.
  */
 export default class MigrationsBuilder {
 	migrations : Migrations = [];
 
 	/**
 	 * Add an "up" migration.
-	 * @param schema is an integer that represents the version of the data directory
+	 * @param schema (integer) schema version of the data directory
 	 * after the migration function has run.
 	 * @param func is the migration function.
 	 */
@@ -54,9 +55,9 @@ export default class MigrationsBuilder {
 	}
 	/**
 	 * Add a "down" migration.
-	 * @param schema is an integer that represents the version of the data directory 
-	 * prior to running the migration function.
-	 * @param func is the migration function.
+	 * @param schema (integer) schema version of the data directory 
+	 * prior to running the migration function
+	 * @param func migration function
 	 */
 	downFrom(schema:number, func:MigrationFunction) :void {
 		schema = Math.round(schema);
