@@ -14,4 +14,8 @@ export type User = {
 	 * Display name to use for the user.
 	 */
 	displayName: string
+	/**
+	 * filename of the avatar for the user
+	 */
+	avatar: string
 }
