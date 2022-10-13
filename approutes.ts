@@ -1,11 +1,17 @@
-import type {ServerRequest} from "https://deno.land/std@0.106.0/http/server.ts";
+import type {
+	AppRoute as AppRouteInternal,
+	Context as ContextInternal,
+	Handler as HandlerInternal
+} from 'https://deno.land/x/dropserver_lib_support@v0.2.0/mod.ts';
 
 /**
  * Context is passed to request handlers.
  */
 export interface Context {
-	/** req is the raw request. Note that the url is incorrect (?) */
-	req: ServerRequest
+	/** request is the raw request. Note that the url is incorrect (?) */
+	request: Request
+	/** respondWith sends a response to the request */
+	respondWith(r: Response | Promise<Response>): Promise<void>
 	/** params are values of parametrized url paths for this request */
 	params: Record<string, unknown>
 	/** url that was actually requested (?)  */
@@ -129,7 +135,7 @@ export type AppRoutes = AppRoute[]
  * a familiar pattern. 
  */
 export default class RoutesBuilder {
-	routes: AppRoutes = [];
+	routes: AppRouteInternal[] = [];
 	#static_handlers: Map<Handler,StaticOpts> = new Map();
 
 	/**
@@ -156,7 +162,8 @@ export default class RoutesBuilder {
 				auth,
 				method,
 				path,
-				handler
+				handler: getHandler(handler),
+				handlerName: handler.name
 			});
 		}
 	}
@@ -171,6 +178,20 @@ export default class RoutesBuilder {
 		const h = function() {};
 		this.#static_handlers.set(h, opts);
 		return h;
+	}
+}
+
+function getHandler(h :Handler) :HandlerInternal {
+	return function(ctx :ContextInternal) {
+		const c :Context = {
+			request: ctx.req.request,
+			respondWith: ctx.req.respondWith, 
+			// TODO: respondJSON, respondHTML, respondStatus
+			params: ctx.params,
+			url: ctx.url,
+			proxyId: ctx.proxyId
+		};
+		h(c);
 	}
 }
 
