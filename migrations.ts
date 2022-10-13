@@ -36,7 +36,7 @@ export type Migrations = Migration[];
 /**
  * Class that helps create a Migrations object.
  */
-export default class MigrationsBuilder {
+export class MigrationsBuilder {
 	migrations : Migrations = [];
 
 	/**

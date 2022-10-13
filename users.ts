@@ -1,7 +1,7 @@
 /**
  * User represents an appspace user.
  */
-export type User = {
+export interface User {
 	/**
 	 * proxyID is the unique string key that identifies the user in an appspace.
 	 */

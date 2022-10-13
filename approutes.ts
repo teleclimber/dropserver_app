@@ -127,14 +127,12 @@ export type FunctionAppRoute = AppRouteBase & {
 
 export type AppRoute = StaticAppRoute|FunctionAppRoute
 
-export type AppRoutes = AppRoute[]
-
 /**
  * RoutesBuilder is a convenience class that helps you create
  * application routes for the createApp function using a 
  * a familiar pattern. 
  */
-export default class RoutesBuilder {
+export class RoutesBuilder {
 	routes: AppRouteInternal[] = [];
 	#static_handlers: Map<Handler,StaticOpts> = new Map();
 

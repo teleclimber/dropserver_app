@@ -5,7 +5,7 @@
 Import `createApp` to get going:
 
 ```TS
-import createApp from 'https://deno.land/x/dropserver_app/mod.ts';
+import {createApp} from 'https://deno.land/x/dropserver_app/mod.ts';
 
 const app = createApp({
 	routes:     // your app routes... see docs.
@@ -15,7 +15,10 @@ const app = createApp({
 export default app;
 ```
 
-There are more docs coming, but in the meantime check the type docs.
+Docs and help:
+
+- Docs for this library are available at [deno.land/x/dropserver_app](https://deno.land/x/dropserver_app/)
+- A tutorial for building a Dropserver app using this lib is at [dropserver.org/docs/build-dropserver-app-tutorial](https://dropserver.org/docs/build-dropserver-app-tutorial/)
 
 # License
 

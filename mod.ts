@@ -1,8 +1,12 @@
-import * as path from "https://deno.land/std@0.106.0/path/mod.ts";
+import * as path from "https://deno.land/std@0.159.0/path/mod.ts";
+
+export {MigrationsBuilder} from './migrations.ts';
+export {RoutesBuilder, AuthAllow} from './approutes.ts';
+export type {Context} from './approutes.ts';
 
 import type {User} from './users.ts';
 
-import type {AppRoutes} from'./approutes.ts';
+import type {AppRoute as AppRouteInternal} from 'https://deno.land/x/dropserver_lib_support@v0.2.0/mod.ts';
 import type {Migrations} from './migrations.ts';
 
 import mustGetLibSupport from './getlibsupport.ts';
@@ -62,7 +66,7 @@ export class DropserverApp {
 	}
 }
 
-type AppRoutesFn = ()=>AppRoutes;
+type AppRoutesFn = ()=>AppRouteInternal[];
 
 type MigrationsFn = () => Migrations;
 type MigrationsPr = () => Promise<Migrations>;
@@ -75,7 +79,7 @@ export interface AppConfig {
 	/**
 	 * routes are application routes. They do not change.
 	 */
-	routes : AppRoutes | AppRoutesFn
+	routes : AppRouteInternal[] | AppRoutesFn
 	/** 
 	 * migrations transform the appspace data such that it matches the 
 	 * target schema.
@@ -89,13 +93,13 @@ export interface AppConfig {
  * @returns a DropserverApp interface that should be used by app code to 
  * interact with the Dropserver host.
  */
-export default function createApp(config:AppConfig) :DropserverApp {
+export function createApp(config:AppConfig) :DropserverApp {
 	const libSupport = mustGetLibSupport();
 	
 	// routes:
 	let routes :AppRoutesFn|undefined;
 	if( typeof config.routes === "function" ) routes = config.routes;
-	else if( Array.isArray(config.routes) ) routes = (() => <AppRoutes>config.routes);
+	else if( Array.isArray(config.routes) ) routes = (() => <AppRouteInternal[]>config.routes);
 	
 	if( routes === undefined ) throw new Error("routes is missing or not recognized type");
 	libSupport.appRoutes.setCallback(routes);
