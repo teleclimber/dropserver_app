@@ -5,13 +5,19 @@ import type {
 } from 'https://deno.land/x/dropserver_lib_support@v0.2.0/mod.ts';
 
 /**
- * Context is passed to request handlers.
+ * Context is passed to app's request handlers.
  */
 export interface Context {
 	/** request is the raw request. Note that the url is incorrect (?) */
 	request: Request
 	/** respondWith sends a response to the request */
 	respondWith(r: Response | Promise<Response>): Promise<void>
+	/** respondHtml sends the html string with HTML content headers */
+	respondHtml(html:string): void
+	/** respondJson sends the data as JSON */
+	respondJson(data:any): void
+	/** respondStatus sends the status number and optional text as a response */
+	respondStatus(status:number, text:string): void
 	/** params are values of parametrized url paths for this request */
 	params: Record<string, unknown>
 	/** url that was actually requested (?)  */
@@ -184,7 +190,16 @@ function getHandler(h :Handler) :HandlerInternal {
 		const c :Context = {
 			request: ctx.req.request,
 			respondWith: ctx.req.respondWith, 
-			// TODO: respondJSON, respondHTML, respondStatus
+			respondHtml: (html:string) => {
+				ctx.req.respondWith(new Response(html, {headers:new Headers({'Content-Type': 'text/html'})}));
+			},
+			// @ts-ignore data has to be any
+			respondJson: (data:any) => {
+				ctx.req.respondWith(Response.json(data));
+			},
+			respondStatus: (status:number, text="") => {
+				ctx.req.respondWith(new Response(text, {status}));
+			},
 			params: ctx.params,
 			url: ctx.url,
 			proxyId: ctx.proxyId
