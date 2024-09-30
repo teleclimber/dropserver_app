@@ -6,7 +6,7 @@ export type {Context} from './approutes.ts';
 
 import type {User} from './users.ts';
 
-import type {AppRoute as AppRouteInternal} from 'https://deno.land/x/dropserver_lib_support@v0.2.0/mod.ts';
+import type {AppRoute as AppRouteInternal} from 'https://deno.land/x/dropserver_lib_support@v0.2.1/mod.ts';
 import type {Migrations} from './migrations.ts';
 
 import mustGetLibSupport from './getlibsupport.ts';

@@ -2,7 +2,7 @@ import type {
 	AppRoute as AppRouteInternal,
 	Context as ContextInternal,
 	Handler as HandlerInternal
-} from 'https://deno.land/x/dropserver_lib_support@v0.2.0/mod.ts';
+} from 'https://deno.land/x/dropserver_lib_support@v0.2.1/mod.ts';
 
 /**
  * Context is passed to app's request handlers.
