@@ -1,4 +1,4 @@
-import * as path from "https://deno.land/std@0.218.0/path/mod.ts";
+import {join} from "jsr:@std/path";
 
 export {MigrationsBuilder} from './migrations.ts';
 export {RoutesBuilder, AuthAllow} from './approutes.ts';
@@ -25,7 +25,7 @@ export class DropserverApp {
 	appPath(p:string) :string {
 		// path functions should take a sequence of args, and apply path.join over all of them.
 		const internal = mustGetLibSupport();
-		return path.join(internal.appPath, p);
+		return join(internal.appPath, p);
 	}
 	/**
 	 * Get an absolute path to appspace files.
@@ -35,7 +35,7 @@ export class DropserverApp {
 	 */
 	appspacePath(p:string) :string {
 		const internal = mustGetLibSupport();
-		return path.join(internal.appspacePath, p);
+		return join(internal.appspacePath, p);
 	}
 	/**
 	 * Get an absolute path to appspace user avatars.
@@ -44,7 +44,7 @@ export class DropserverApp {
 	 * @returns absolute path
 	 */
 	avatarsPath(p:string) :string {
-		return path.join(mustGetLibSupport().avatarsPath, p);
+		return join(mustGetLibSupport().avatarsPath, p);
 	}
 
 	/**
